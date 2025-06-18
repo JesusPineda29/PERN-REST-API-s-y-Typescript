@@ -1,29 +1,31 @@
 import { Request, Response } from "express"
-import { check, validationResult } from 'express-validator'
-import Product from "../models/Product.model"
+import Product from '../models/Product.model';
+
+export const getProducts = async (req: Request, res: Response) => {
+    
+    try {
+        const products = await Product.findAll({
+            order: [
+                ['id', 'DESC']
+            ]
+        })
+        res.json({ data: products })
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
 
 export const createProduct = async (req: Request, res: Response) => {
 
-    // validación
-    await check('name').notEmpty().withMessage('El nombre de producto no puede ir vacio').run(req)
-    await check('price')
-                    .isNumeric().withMessage('Valor no válido')
-                    .notEmpty().withMessage('El nombre de producto no puede ir vacio')
-                    .custom( value => value > 0.).withMessage('Precio no válido')
-                    .run(req)
+    try {
 
-                    
-    let errors = validationResult(req)
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
+        const product = await Product.create(req.body)
+        res.json({ data: product })
+
+    } catch (error) {
+        console.log(error)
     }
 
-
-
-
-
-    const product = await Product.create(req.body)
-    res.json({ data: product })
 }
