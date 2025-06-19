@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { body, param } from "express-validator"
-import { createProduct, getProducts, getProductsByid, updateProduct } from "./handlers/products"
+import { createProduct, deleteProduct, getProducts, getProductsByid, updateAvailability, updateProduct } from "./handlers/products"
 import { handleImputErrors } from "./middleware"
 
 const router = Router()
@@ -29,17 +29,37 @@ router.post('/',
     createProduct)
 
 
+
 router.put('/:id',
+    // validación
+    body('name')
+        .notEmpty().withMessage('El nombre de producto no puede ir vacio'),
+    body('price')
+        .isNumeric().withMessage('Valor no válido')
+        .notEmpty().withMessage('El nombre de producto no puede ir vacio')
+        .custom(value => value > 0.).withMessage('Precio no válido'),
+    body('availability')
+        .isBoolean().withMessage('Valor para disponibilidad no válido'),
+    handleImputErrors,
     updateProduct
 )
 
-router.patch('/', (req, res) => {
-    res.json('Desde PATCH')
-})
 
-router.delete('/', (req, res) => {
-    res.json('Desde DELETE')
-})
+router.patch('/:id',
+    param('id').isInt().withMessage('ID no valido'),
+    handleImputErrors,
+    updateAvailability
+)
+
+
+
+
+
+router.delete('/:id', 
+    param('id').isInt().withMessage('ID no valido'),
+    handleImputErrors,    
+    deleteProduct
+)
 
 
 export default router
