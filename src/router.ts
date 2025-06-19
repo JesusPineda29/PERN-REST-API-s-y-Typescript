@@ -1,6 +1,6 @@
 import { Router } from "express"
-import { body } from "express-validator"
-import { createProduct, getProducts } from "./handlers/products"
+import { body, param } from "express-validator"
+import { createProduct, getProducts, getProductsByid } from "./handlers/products"
 import { handleImputErrors } from "./middleware"
 
 const router = Router()
@@ -8,16 +8,24 @@ const router = Router()
 // Routing
 router.get('/', getProducts)
 
+
+
+router.get('/:id',
+    param('id').isInt().withMessage('ID no valido'),
+    handleImputErrors,
+    getProductsByid)
+
+
+
 router.post('/',
     // validación
-    body('name').notEmpty().withMessage('El nombre de producto no puede ir vacio'),
-
+    body('name')
+        .notEmpty().withMessage('El nombre de producto no puede ir vacio'),
     body('price')
         .isNumeric().withMessage('Valor no válido')
         .notEmpty().withMessage('El nombre de producto no puede ir vacio')
         .custom(value => value > 0.).withMessage('Precio no válido'),
     handleImputErrors,
-
     createProduct)
 
 
