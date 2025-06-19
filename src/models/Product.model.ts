@@ -7,15 +7,18 @@ import { Table, Column, Model, DataType, Default } from "sequelize-typescript"
 
 
 class Product extends Model {
+
     @Column({
         type: DataType.STRING(100)
     })
     declare name: string
 
+
     @Column({
-        type: DataType.FLOAT(6, 2)
+        type: DataType.FLOAT
     })
     declare price: number
+
 
     @Default(true)
     @Column({
@@ -25,6 +28,7 @@ class Product extends Model {
 }
 
 export default Product
+
 
 
 
