@@ -2,46 +2,36 @@ import { Request, Response } from "express"
 import Product from '../models/Product.model';
 
 export const getProducts = async (req: Request, res: Response) => {
-    try {
-        const products = await Product.findAll({
-            order: [
-                ['id', 'DESC']
-            ],
-            attributes: { exclude: ['createdAt', 'updatedAt', 'availability'] }
-        })
-        res.json({ data: products })
-    } catch (error) {
-        console.log(error)
-    }
+
+    const products = await Product.findAll({
+        order: [
+            ['id', 'DESC']
+        ],
+        attributes: { exclude: ['createdAt', 'updatedAt', 'availability'] }
+    })
+    res.json({ data: products })
 }
 
 export const getProductsByid = async (req: Request, res: Response) => {
-    try {
-        const { id } = req.params
-        const product = await Product.findByPk(id)
 
-        if (!product) {
-            return res.status(404).json({
-                error: 'Producto no encontrado'
-            })
-        }
+    const { id } = req.params
+    const product = await Product.findByPk(id)
 
-        res.json({ data: product })
-
-    } catch (error) {
-        console.log(error)
+    if (!product) {
+        return res.status(404).json({
+            error: 'Producto no encontrado'
+        })
     }
+
+    res.json({ data: product })
 }
 
 
 export const createProduct = async (req: Request, res: Response) => {
 
-    try {
-        const product = await Product.create(req.body)
-        res.status(201).json({ data: product })
-    } catch (error) {
-        console.log(error)
-    }
+
+    const product = await Product.create(req.body)
+    res.status(201).json({ data: product })
 }
 
 
@@ -97,7 +87,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
     }
 
     await product.destroy()
-    res.json({data: 'Producto Eliminado'})
+    res.json({ data: 'Producto Eliminado' })
 
 
 }

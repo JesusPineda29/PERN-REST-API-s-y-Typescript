@@ -98,7 +98,6 @@ describe('GET /api/products/:id', () => {
 })
 
 
-
 describe('PUT /api/products/:id', () => {
 
     it('should check a valid ID in the URL', async () => {
@@ -176,6 +175,51 @@ describe('PUT /api/products/:id', () => {
         expect(response.body).not.toHaveProperty('errors')
     })
 })
+
+
+
+describe('PATCH /api/products/:id', () => {
+
+    it('should check a valid ID in the URL', async () => {
+        const response = await reques(server).patch('/api/products/not-valid-url')
+            .send({
+                name: "Monitor Curvo",
+                availability: true,
+                price: 300,
+            })
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('errors');
+        expect(response.body.errors).toHaveLength(1);
+        expect(response.body.errors[0].msg).toBe('ID no valido');
+    })
+
+    it('should update an existing product with valid data', async () => {
+        const response = await reques(server).patch('/api/products/1')
+            .send({
+                name: "Monitor Curvo",
+                availability: true,
+                price: 300,
+            })
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('data');
+
+        expect(response.status).not.toBe(400);
+        expect(response.body).not.toHaveProperty('errors')
+    })
+
+    it('should return a 404 response for a non-existent product', async () => {
+        const productId = 2000; // Assuming this ID does not exist
+        const response = await reques(server).patch(`/api/products/${productId}`)
+            .send({
+                name: "Monitor Curvo",
+                availability: true,
+                price: 300
+            })
+        expect(response.status).toBe(404);
+        expect(response.body.error).toBe('Producto no encontrado');
+    })
+})
+
 
 
 describe('DELETE /api/products/:id', () => {
