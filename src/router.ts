@@ -5,9 +5,24 @@ import { handleImputErrors } from "./middleware"
 
 const router = Router()
 
+/**
+ * @swagger
+ * components:
+ *      schemas:
+ *          Product:
+ *             type: object
+ *
+ *
+ * 
+ * 
+ * 
+ */
+
+
+
+
 // Routing
 router.get('/', getProducts)
-
 
 
 router.get('/:id',
@@ -56,9 +71,9 @@ router.patch('/:id',
 
 
 
-router.delete('/:id', 
+router.delete('/:id',
     param('id').isInt().withMessage('ID no valido'),
-    handleImputErrors,    
+    handleImputErrors,
     deleteProduct
 )
 
