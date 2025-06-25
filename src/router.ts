@@ -246,7 +246,7 @@ router.patch('/:id',
  *          summary: Delete a product by ID
  *          tags: 
  *              - Products
- *          description: Deletes a product based on its unique ID
+ *          description: Returns a confirmation message
  *          parameters:
  *           - in: path
  *             name: id
@@ -256,11 +256,17 @@ router.patch('/:id',
  *                 type: integer
  *          responses:
  *              200:
- *                  description: "Producto eliminado"     
+ *                  description: Successful response, product deleted
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              type: string
+ *                              value: "Producto eliminado"
+ *              400:
+ *                 description: Bad request, invalid ID
  *              404:
- *                  description: Not found, invalid ID
+ *                  description: Product not found
  */
-
 
 
 
@@ -275,3 +281,8 @@ export default router
 
 
 
+// Documentación de la API
+// http://localhost:4000/docs/#/
+
+// API
+// http://localhost:4000/api/products
