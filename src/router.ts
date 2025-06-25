@@ -82,11 +82,6 @@ router.get('/', getProducts)
  *               description: Not found
  *            400:
  *               description: Bad request, invalid ID
- * 
- 
- 
- * 
- * 
  */
 
 
@@ -97,7 +92,36 @@ router.get('/', getProducts)
 router.get('/:id',
     param('id').isInt().withMessage('ID no valido'),
     handleImputErrors,
-    getProductsByid)
+    getProductsByid
+)
+
+/**
+ * @swagger
+ * /api/products:
+ *      post:
+ *          summary: Create a new product
+ *          tags: 
+ *              - Products
+ *          description: Returns a new record in the database
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              name:
+ *                                  type: string
+ *                                  example: "Monitor Curvo de 49 Pulgadas"
+ *                              price:
+ *                                  type: number
+ *                                  example: 199.99
+ *          responses:
+ *              201:
+ *                  description: Product created successfully        
+ *              400:
+ *                  description: Bad request, invalid input data
+ */
 
 
 
