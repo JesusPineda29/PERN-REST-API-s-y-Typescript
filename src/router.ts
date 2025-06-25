@@ -117,9 +117,13 @@ router.get('/:id',
  *                                  type: number
  *                                  example: 199.99
  *          responses:
- *              201:
- *                  description: Product created successfully        
- *              400:
+ *               201:
+ *                 description: Successfull response
+ *                 content:
+ *                   application/json:  
+ *                      schema: 
+ *                         $ref: '#/components/schemas/Product'     
+ *               400:
  *                  description: Bad request, invalid input data
  */
 
@@ -134,8 +138,53 @@ router.post('/',
         .notEmpty().withMessage('El nombre de producto no puede ir vacio')
         .custom(value => value > 0.).withMessage('Precio no válido'),
     handleImputErrors,
-    createProduct)
+    createProduct
+)
 
+
+/**  
+ * @swagger
+ * /api/products/{id}:
+ *      put:
+ *          summary: Update a product with user input
+ *          tags:   
+ *              - Products
+ *          description: Returns the updated product
+ *          parameters:
+ *              - in: path
+ *                name: id
+ *                description: The ID of the product to retrieve
+ *                required: true
+ *                schema:
+ *                    type: integer
+ *          requestBody:    
+ *               required: true
+ *               content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              name:
+ *                                  type: string
+ *                                  example: "Monitor Curvo de 49 Pulgadas"
+ *                              price:
+ *                                  type: number
+ *                                  example: 199.99
+ *                              availability: 
+ *                                  type: boolean
+ *                                  example: true
+ *          responses:
+ *               200:
+ *                 description: Successfull response
+ *                 content:
+ *                   application/json:  
+ *                      schema: 
+ *                         $ref: '#/components/schemas/Product'
+ *               400:
+ *                 description: Bad request, invalid ID or invalid input data
+ *               404:
+ *                 description: Product Not found
+*/
 
 
 router.put('/:id',
